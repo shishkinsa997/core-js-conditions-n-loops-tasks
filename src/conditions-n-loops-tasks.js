@@ -287,8 +287,23 @@ function isContainNumber(num, digit) {
  *  [2, 3, 9, 5] => 2       => 2 + 3 === 5 then balance element is 9 and its index = 2
  *  [1, 2, 3, 4, 5] => -1   => no balance element
  */
-function getBalanceIndex(/* arr */) {
-  throw new Error('Not implemented');
+function getBalanceIndex(arr) {
+  let left = 0;
+  let right = 0;
+  for (let i = 1; i < arr.length; i += 1) {
+    for (let j = 0; j < arr.length; j += 1) {
+      if (j < i) {
+        left += arr[j];
+      }
+      if (j > i) {
+        right += arr[j];
+      }
+    }
+    if (left === right) return i;
+    left = 0;
+    right = 0;
+  }
+  return -1;
 }
 
 /**
@@ -312,8 +327,51 @@ function getBalanceIndex(/* arr */) {
  *          [10, 9,  8,  7]
  *        ]
  */
-function getSpiralMatrix(/* size */) {
-  throw new Error('Not implemented');
+function getSpiralMatrix(size) {
+  const matrix = [];
+  let r = 0;
+  let c = 0;
+  let re = size - 1;
+  let ce = size - 1;
+  let curr = 1;
+
+  for (let i = 0; i < size; i += 1) {
+    matrix[i] = [];
+    for (let j = 0; j < size; j += 1) {
+      matrix[i][j] = 0;
+    }
+  }
+
+  for (let i = 0; i <= re; i += 1) {
+    matrix[0][i] = i + 1;
+  }
+
+  while (curr <= size ** 2) {
+    for (let i = c; i <= ce; i += 1) {
+      matrix[r][i] = curr;
+      curr += 1;
+    }
+    r += 1;
+
+    for (let i = r; i <= re; i += 1) {
+      matrix[i][ce] = curr;
+      curr += 1;
+    }
+    ce -= 1;
+
+    for (let i = ce; i >= c; i -= 1) {
+      matrix[re][i] = curr;
+      curr += 1;
+    }
+    re -= 1;
+
+    for (let i = re; i >= r; i -= 1) {
+      matrix[i][c] = curr;
+      curr += 1;
+    }
+    c += 1;
+  }
+  return matrix;
 }
 
 /**
@@ -331,8 +389,28 @@ function getSpiralMatrix(/* size */) {
  *    [7, 8, 9]         [9, 6, 3]
  *  ]                 ]
  */
-function rotateMatrix(/* matrix */) {
-  throw new Error('Not implemented');
+function rotateMatrix(matrix) {
+  const size = matrix[0].length;
+  const result = matrix;
+  let copy = [];
+
+  for (let i = 0; i < matrix.length; i += 1) {
+    let row = [];
+
+    for (let j = size - 1; j >= 0; j -= 1) {
+      row = [...row, matrix[j][i]];
+    }
+
+    copy = [...copy, row];
+  }
+
+  for (let i = 0; i < size; i += 1) {
+    for (let j = size - 1; j >= 0; j -= 1) {
+      result[i][j] = copy[i][j];
+    }
+  }
+
+  return result;
 }
 
 /**
