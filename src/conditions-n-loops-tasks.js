@@ -337,10 +337,31 @@ function rotateMatrix(/* matrix */) {
  *  [2, 9, 5, 9]    => [2, 5, 9, 9]
  *  [-2, 9, 5, -3]  => [-3, -2, 5, 9]
  */
-function sortByAsc(/* arr */) {
-  throw new Error('Not implemented');
-}
+function sortByAsc(arr) {
+  const a = arr;
 
+  const sort = (low, hight) => {
+    if (low >= hight) return;
+    const pivot = a[hight];
+    let i = low;
+    for (let j = low; j < hight; j += 1) {
+      if (a[j] <= pivot) {
+        const t = a[i];
+        a[i] = a[j];
+        a[j] = t;
+        i += 1;
+      }
+    }
+    const t = a[i];
+    a[i] = a[hight];
+    a[hight] = t;
+    sort(low, i - 1);
+    sort(i + 1, hight);
+  };
+
+  sort(0, a.length - 1);
+  return arr;
+}
 /**
  * Shuffles characters in a string so that the characters with an odd index are moved to the end of the string at each iteration.
  * Take into account that the string can be very long and the number of iterations is large. Consider how you can optimize your solution.
@@ -394,8 +415,29 @@ function shuffleChar(str, it) {
  * 321321   => 322113
  *
  */
-function getNearestBigger(/* number */) {
-  throw new Error('Not implemented');
+function getNearestBigger(num) {
+  const ds = [];
+  let n = num;
+  while (n > 0) {
+    ds.unshift(n % 10);
+    n = Math.floor(n / 10);
+  }
+  for (let i = ds.length - 2; i >= 0; i -= 1) {
+    if (ds[i] < ds[i + 1]) {
+      let min = i + 1;
+      for (let j = i + 2; j < ds.length; j += 1) {
+        if (ds[j] > ds[i] && ds[j] < ds[min]) {
+          min = j;
+        }
+      }
+      [ds[i], ds[min]] = [ds[min], ds[i]];
+      const tail = ds.splice(i + 1);
+      tail.sort((a, b) => a - b);
+      ds.push(...tail);
+      return ds.reduce((acc, d) => acc * 10 + d, 0);
+    }
+  }
+  return num;
 }
 
 module.exports = {
